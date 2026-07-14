@@ -19,14 +19,15 @@ vec4 readTex(vec2 uv) {
 vec2 zoom(vec2 uv, float t) {
   return (uv - .5) * t + .5;
 }
-float wave(float y) {
-  return sin(y * 1190. + time * 3.) * sin(y * 1001. + time * 7.) * sin(y * 1479. + time * .5) * 0.001;
+float wave(float y, float t) {
+  return sin(y * 1190. + t * 3.) * sin(y * 1001. + t * 7.) * sin(y * 1479. + t * .5) * 0.001;
 }
 float rand(vec3 p) {
   return fract(sin(dot(p, vec3(829., 4839., 432.))) * 39428.);
 }
 
 void main() {
+  float t = mod(time, 300.0);
   vec2 uv = (gl_FragCoord.xy - offset) / resolution;       
   
   vec2 p = uv * 2. - 1.;
@@ -41,7 +42,7 @@ void main() {
   // blur
   vec2 du = (uv - .5);
   float a = atan(p.y, p.x);
-  float rd = rand(vec3(a, time, 0));
+  float rd = rand(vec3(a, t, 0));
   uv = (uv - .5) * (1.0 + rd * pow(l * 0.7, 3.) * 0.3) + .5;
     
   vec2 uvr = uv;
@@ -49,7 +50,7 @@ void main() {
   vec2 uvb = uv;
     
   // aberration
-  float d = (1. + sin(uv.y * 20. + time * 3.) * 0.1) * 0.05;
+  float d = (1. + sin(uv.y * 20. + t * 3.) * 0.1) * 0.05;
   uvr.x += 0.0015;
   uvb.x -= 0.0015;
   uvr = zoom(uvr, 1. + d * l * l);
@@ -67,8 +68,8 @@ void main() {
   // scanline
   float res = resolution.y;
   deco += (
-    sin(uv.y * res * .7 + time * 100.) *
-    sin(uv.y * res * .3 - time * 130.)
+    sin(uv.y * res * .7 + t * 100.) *
+    sin(uv.y * res * .3 - t * 130.)
   ) * 0.05;
 
   // grid
@@ -81,7 +82,7 @@ void main() {
 
 
   // dither
-  outColor += rand(vec3(p, time)) * 0.1;     
+  outColor += rand(vec3(p, t)) * 0.1;     
 }
 `;
 
@@ -107,33 +108,33 @@ float rand(vec3 p) {
   return fract(sin(dot(p, vec3(829., 4839., 432.))) * 39428.);
 }
 
-vec2 dist(vec2 uv, float f) {
-  float t = time + id;
+vec2 dist(vec2 uv, float f, float t) {
   uv += sin(uv.y * 12. + t * 1.7) * sin(uv.y * 17. + t * 2.3) * f;
 
   return uv;
 }
 
 void main() {
+  float t = mod(time, 300.0);
   vec2 uv = (gl_FragCoord.xy - offset) / resolution;
   vec2 uvr = uv, uvg = uv, uvb = uv;
 
-  float r = rand(vec2(floor(time * 43.), id));
-  //float r = rand(vec2(time, id));  
+  float r = rand(vec2(floor(t * 43.), id));
+  //float r = rand(vec2(t, id));  
   if (r > 0.8) {
-    float y = sin(floor(uv.y / 0.07)) + sin(floor(uv.y / 0.003 + time));
-    float f = rand(vec2(y, floor(time * 5.0) + id)) * 2. - 1.;
+    float y = sin(floor(uv.y / 0.07)) + sin(floor(uv.y / 0.003 + t));
+    float f = rand(vec2(y, floor(t * 5.0) + id)) * 2. - 1.;
     uvr.x += f * 0.1;
     uvg.x += f * 0.2;
     uvb.x += f * 0.3;
   }
   
     
-  float r2 = rand(vec2(floor(time * 37.), id + 10.));
+  float r2 = rand(vec2(floor(t * 37.), id + 10.));
   if (r2 > 0.9) {
-    uvr.x += sin(uv.y * 7. + time + id + 1.) * 0.03;
-    uvg.x += sin(uv.y * 5. + time + id + 2.) * 0.03;
-    uvb.x += sin(uv.y * 3. + time + id + 3.) * 0.03;
+    uvr.x += sin(uv.y * 7. + t + id + 1.) * 0.03;
+    uvg.x += sin(uv.y * 5. + t + id + 2.) * 0.03;
+    uvb.x += sin(uv.y * 3. + t + id + 3.) * 0.03;
   }
   
   
