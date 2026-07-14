@@ -150,7 +150,12 @@ const vfx = new VFX({
   postEffect: { shader } 
 });
 
-window.addEventListener('load', function () {
+window.addEventListener('load', async function () {
+  // Wait for all Google Fonts / Web Fonts to be fully loaded
+  if (document.fonts) {
+    await document.fonts.ready;
+  }
+
   let i = 0;
   for (const e of document.querySelectorAll('img,h1,h2,h6,p')) {
     const z = e.getAttribute('data-z');

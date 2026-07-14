@@ -1,7 +1,12 @@
-html, body { margin: 0; }
-body {
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
   background: black;
-  overflow-x: hidden;  
+}
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -79,9 +84,13 @@ img {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
   section {
-    margin: 20vh 10%;
-    width: 80%;
+    margin: 15vh 8%;
+    width: 84%;
   }
   .col {
     flex-direction: column;
@@ -93,5 +102,19 @@ img {
   }
   .right {
     text-align: center;
+  }
+  h1 {
+    font-size: 8vw;
+  }
+  h2 {
+    font-size: 8vw;
+    margin: 25vh 0;
+  }
+  h6 {
+    font-size: 3vw;
+    letter-spacing: 3px;
+  }
+  p {
+    font-size: 4vw;
   }
 }
