@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Berkshire Swash';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/berkshire-swash.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('fonts/jetbrains-mono-variable.woff2') format('woff2');
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -89,7 +105,7 @@ img {
     overflow-x: hidden;
   }
   section {
-    margin: 15vh 8%;
+    margin: 35vh 8%;
     width: 84%;
   }
   .col {
