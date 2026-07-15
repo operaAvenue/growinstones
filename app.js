@@ -4,18 +4,18 @@ import { VFX } from "https://esm.sh/@vfx-js/core@0.8.0";
 
 // Global configuration object with default parameters
 window.VFX_CONFIG = window.VFX_CONFIG || {
-  vignette: 1.8,
-  scanlineSpeed: 100.0,
-  scanlineOpacity: 0.05,
-  chromaticAberration: 0.05,
-  dither: 0.1,
-  gridIntensity: 0.1,
-  glitchFreq: 0.8,
-  glitchInt: 0.03,
-  curvature: 0.3,
-  zoom: 0.5,
-  blur: 0.3,
-  gridScale: 20.0,
+  vignette: 1.4,
+  scanlineSpeed: 100,
+  scanlineOpacity: 0.01,
+  chromaticAberration: 0.03,
+  dither: 0,
+  gridIntensity: 0,
+  glitchFreq: 0.99,
+  glitchInt: 0.005,
+  curvature: 0,
+  zoom: 0.7,
+  blur: 0.1,
+  gridScale: 20,
 };
 
 const shader = `
