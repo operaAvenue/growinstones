@@ -12,6 +12,10 @@ window.VFX_CONFIG = window.VFX_CONFIG || {
   gridIntensity: 0.1,
   glitchFreq: 0.8,
   glitchInt: 0.03,
+  curvature: 0.3,
+  zoom: 0.5,
+  blur: 0.3,
+  gridScale: 20.0,
 };
 
 const shader = `
@@ -28,6 +32,10 @@ uniform float uScanlineOpacity;
 uniform float uChromaticAberration;
 uniform float uDither;
 uniform float uGridIntensity;
+uniform float uCurvature;
+uniform float uZoom;
+uniform float uBlur;
+uniform float uGridScale;
 
 out vec4 outColor;
 
@@ -55,16 +63,16 @@ void main() {
   p.x *= resolution.x / resolution.y;
   float l = length(p); 
    
-  // distort
-  float dist = pow(l, 2.) * .3;
+  // distort / curvature
+  float dist = pow(l, 2.) * uCurvature;
   dist = smoothstep(0., 1., dist);
-  uv = zoom(uv, 0.5 + dist);  
+  uv = zoom(uv, uZoom + dist);  
     
-  // blur
+  // radial blur
   vec2 du = (uv - .5);
   float a = atan(p.y, p.x);
   float rd = rand(vec3(a, t, 0));
-  uv = (uv - .5) * (1.0 + rd * pow(l * 0.7, 3.) * 0.3) + .5;
+  uv = (uv - .5) * (1.0 + rd * pow(l * 0.7, 3.) * uBlur) + .5;
     
   vec2 uvr = uv;
   vec2 uvg = uv;
@@ -94,7 +102,7 @@ void main() {
   ) * uScanlineOpacity;
 
   // grid
-  deco += smoothstep(.01, .0, min(fract(uv.x * 20.), fract(uv.y * 20.))) * uGridIntensity;
+  deco += smoothstep(.01, .0, min(fract(uv.x * uGridScale), fract(uv.y * uGridScale))) * uGridIntensity;
 
   outColor += deco * smoothstep(2., 0., l);
   
@@ -178,6 +186,10 @@ const vfx = new VFX({
       uChromaticAberration: () => window.VFX_CONFIG.chromaticAberration,
       uDither: () => window.VFX_CONFIG.dither,
       uGridIntensity: () => window.VFX_CONFIG.gridIntensity,
+      uCurvature: () => window.VFX_CONFIG.curvature,
+      uZoom: () => window.VFX_CONFIG.zoom,
+      uBlur: () => window.VFX_CONFIG.blur,
+      uGridScale: () => window.VFX_CONFIG.gridScale,
     }
   } 
 });

@@ -408,6 +408,30 @@
             <label>Glitch Intensity <span class="val" id="val-glitch-int">0.03</span></label>
             <input type="range" class="slider-input" id="slide-glitch-int" min="0" max="0.1" step="0.005" value="0.03" oninput="updateVFX('glitchInt', this.value)">
           </div>
+
+          <!-- Lens Curvature -->
+          <div class="control-group">
+            <label>Lens Curvature <span class="val" id="val-curvature">0.3</span></label>
+            <input type="range" class="slider-input" id="slide-curvature" min="0" max="1" step="0.02" value="0.3" oninput="updateVFX('curvature', this.value)">
+          </div>
+
+          <!-- Lens Zoom -->
+          <div class="control-group">
+            <label>Lens Zoom / Scale <span class="val" id="val-zoom">0.5</span></label>
+            <input type="range" class="slider-input" id="slide-zoom" min="0.2" max="1" step="0.02" value="0.5" oninput="updateVFX('zoom', this.value)">
+          </div>
+
+          <!-- Radial Blur -->
+          <div class="control-group">
+            <label>Radial Blur <span class="val" id="val-blur">0.3</span></label>
+            <input type="range" class="slider-input" id="slide-blur" min="0" max="1" step="0.02" value="0.3" oninput="updateVFX('blur', this.value)">
+          </div>
+
+          <!-- Grid Scale -->
+          <div class="control-group">
+            <label>Grid Scale / Density <span class="val" id="val-gridScale">20</span></label>
+            <input type="range" class="slider-input" id="slide-gridScale" min="5" max="50" step="1" value="20" oninput="updateVFX('gridScale', this.value)">
+          </div>
         </div>
         
         <!-- Tab 2: HTML Content -->
@@ -494,6 +518,10 @@
       gridIntensity: 0.1,
       glitchFreq: 0.8,
       glitchInt: 0.03,
+      curvature: 0.3,
+      zoom: 0.5,
+      blur: 0.3,
+      gridScale: 20.0,
     };
 
     // Load original contents on start
@@ -629,6 +657,10 @@
   gridIntensity: ${localVFXConfig.gridIntensity},
   glitchFreq: ${localVFXConfig.glitchFreq},
   glitchInt: ${localVFXConfig.glitchInt},
+  curvature: ${localVFXConfig.curvature},
+  zoom: ${localVFXConfig.zoom},
+  blur: ${localVFXConfig.blur},
+  gridScale: ${localVFXConfig.gridScale},
 };`;
         appContent = appContent.replace(configRegex, newConfigBlock);
 
