@@ -59,32 +59,36 @@ h1 {
   font-family: "Berkshire Swash", serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 6vh;
+  font-size: 3.2vh;
   margin: 0;
   opacity: 0;
+  color: #ffffff;
 }
 h2 {
   font-family: "Berkshire Swash", serif;
-  font-size: 6vh;
+  font-size: 3vh;
   margin: 47vh 0;  
   opacity: 0;  
+  color: #ffffff;
 }
 h6 {
   font-family: "Iosevka Charon Mono", "JetBrains Mono", monospace;
   font-weight: 300;
   font-style: normal;
   letter-spacing: 5px;
-  font-size: 1.8vh;
+  font-size: 1.5vh;
   margin: 1vh 0;  
   opacity: 0;  
+  color: #ffffff;
 }
 p {
   font-family: "JetBrains Mono", monospace;
-  font-size: 2.5vh;
+  font-size: 2.1vh;
   font-weight: 300;
   line-height: 1.6;
   margin: 0;
   opacity: 0;  
+  color: white;
 }
 
 img { 
@@ -123,7 +127,7 @@ img {
     font-size: 8vw;
   }
   h2 {
-    font-size: 8vw;
+    font-size: 7vw;
     margin: 25vh 0;
   }
   h6 {
@@ -131,6 +135,6 @@ img {
     letter-spacing: 3px;
   }
   p {
-    font-size: 4vw;
+    font-size: 3.6vw;
   }
 }
