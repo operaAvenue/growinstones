@@ -11,8 +11,8 @@ window.VFX_CONFIG = window.VFX_CONFIG || {
   dither: 0,
   gridIntensity: 0,
   glitchFreq: 0.99,
-  glitchInt: 0.005,
-  curvature: 0,
+  glitchInt: 0.1,
+  curvature: 0.68,
   zoom: 0.7,
   blur: 0.1,
   gridScale: 20,
@@ -212,5 +212,137 @@ window.addEventListener('load', async function () {
       },
       zIndex: z ? parseInt(z) : 0,
     });
-  }    
-})
+  }
+
+  const heroCanvas = document.getElementById('hero-canvas');
+  if (heroCanvas) {
+    initHeroCanvas(heroCanvas);
+  }
+});
+
+function initHeroCanvas(canvas) {
+  const gl = canvas.getContext('webgl');
+  if (!gl) return;
+
+  function createShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vsSource = `
+    attribute vec2 position;
+    void main() {
+      gl_Position = vec4(position, 0.0, 1.0);
+    }
+  `;
+
+  const fsSource = `
+    precision highp float;
+    uniform vec2 resolution;
+    uniform float time;
+
+    mat2 rotate2d(float angle){
+      return mat2(cos(angle),-sin(angle),sin(angle),cos(angle));
+    }
+
+    float random(vec2 st){
+      return fract(sin(dot(st.xy, vec2(12.9898,78.233)))*43758.5453123);
+    }
+
+    void main(void) {
+      vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+      float t = time * 0.15;
+
+      uv += vec2(sin(uv.y * 4.0 + t * 2.0), cos(uv.x * 4.0 + t * 2.0)) * 0.1;
+      uv = rotate2d(t * 0.25) * uv;
+
+      float intensity = 0.0;
+      float lineWidth = 0.015;
+
+      for(int i=0; i < 7; i++){
+        float i_float = float(i);
+        float wave = sin(t * 2.0 + i_float * 0.5) * 0.5 + 0.5;
+        intensity += lineWidth / abs(wave - length(uv) + sin(uv.x + uv.y) * 0.1);
+      }
+
+      vec3 color1 = vec3(0.76, 0.66, 0.56);
+      vec3 color2 = vec3(0.91, 0.86, 0.80);
+
+      vec3 baseColor = mix(color1, color2, sin(length(uv) * 2.0 - t) * 0.5 + 0.5);
+      vec3 finalColor = baseColor * intensity;
+      finalColor += (random(uv + t) - 0.5) * 0.06;
+
+      gl_FragColor = vec4(finalColor, 1.0);
+    }
+  `;
+
+  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error(gl.getProgramInfoLog(program));
+    return;
+  }
+
+  const positionAttributeLocation = gl.getAttribLocation(program, 'position');
+  const resolutionUniformLocation = gl.getUniformLocation(program, 'resolution');
+  const timeUniformLocation = gl.getUniformLocation(program, 'time');
+
+  const positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  const positions = [
+    -1, -1,
+     1, -1,
+    -1,  1,
+    -1,  1,
+     1, -1,
+     1,  1,
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  function resizeCanvas() {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    }
+  }
+
+  let startTime = Date.now();
+
+  function render() {
+    resizeCanvas();
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.useProgram(program);
+
+    gl.enableVertexAttribArray(positionAttributeLocation);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+    gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
+    gl.uniform1f(timeUniformLocation, (Date.now() - startTime) * 0.001);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
