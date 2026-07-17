@@ -12,10 +12,11 @@ window.VFX_CONFIG = window.VFX_CONFIG || {
   gridIntensity: 0,
   glitchFreq: 0.99,
   glitchInt: 0.1,
-  curvature: 1,
+  curvature: 0.68,
   zoom: 0.7,
   blur: 0.1,
   gridScale: 20,
+  disableHeroBg: false,
 };
 
 const shader = `
@@ -325,6 +326,13 @@ function initHeroCanvas(canvas) {
   let startTime = Date.now();
 
   function render() {
+    if (window.VFX_CONFIG && window.VFX_CONFIG.disableHeroBg) {
+      canvas.style.display = 'none';
+      requestAnimationFrame(render);
+      return;
+    }
+    canvas.style.display = 'block';
+
     resizeCanvas();
 
     gl.clearColor(0, 0, 0, 0);

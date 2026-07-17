@@ -21,6 +21,11 @@ html, body {
   height: 100%;
   overflow-x: hidden;
   background: #000000;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -145,7 +150,7 @@ img {
     overflow-x: hidden;
   }
   section {
-    margin: var(--m-margin, 35vh) 8%;
+    margin: 35vh 8%;
     width: 84%;
   }
   #hero-section {
