@@ -12,7 +12,7 @@ window.VFX_CONFIG = window.VFX_CONFIG || {
   gridIntensity: 0,
   glitchFreq: 0.99,
   glitchInt: 0.1,
-  curvature: 0.68,
+  curvature: 1,
   zoom: 0.7,
   blur: 0.1,
   gridScale: 20,

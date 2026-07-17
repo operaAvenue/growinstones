@@ -82,6 +82,7 @@ section {
 
 h1 {
   font-family: "Berkshire Swash", serif;
+  font-weight: 400;
   font-size: 2.6vh;
   margin: 0;
   opacity: 0;
@@ -89,6 +90,7 @@ h1 {
 }
 h2 {
   font-family: "Berkshire Swash", serif;
+  font-weight: 400;
   font-size: 2.6vh;
   margin: 47vh 0;  
   opacity: 0;  
@@ -124,6 +126,18 @@ img {
   margin: 0;  
 }
 
+.text-only {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+.text-only h2 {
+  margin: 0;
+}
+.text-only p {
+  margin: 0;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   html, body {
@@ -131,7 +145,7 @@ img {
     overflow-x: hidden;
   }
   section {
-    margin: 35vh 8%;
+    margin: var(--m-margin, 35vh) 8%;
     width: 84%;
   }
   #hero-section {
