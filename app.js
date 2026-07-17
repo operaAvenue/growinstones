@@ -7,16 +7,16 @@ window.VFX_CONFIG = window.VFX_CONFIG || {
   vignette: 1.4,
   scanlineSpeed: 100,
   scanlineOpacity: 0.01,
-  chromaticAberration: 0.03,
+  chromaticAberration: 0,
   dither: 0,
   gridIntensity: 0,
   glitchFreq: 0.99,
-  glitchInt: 0.1,
-  curvature: 0.68,
-  zoom: 0.7,
+  glitchInt: 0,
+  curvature: 1,
+  zoom: 0.44,
   blur: 0.1,
   gridScale: 20,
-  disableHeroBg: false,
+  disableHeroBg: true,
 };
 
 const shader = `
